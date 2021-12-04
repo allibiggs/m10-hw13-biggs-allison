@@ -1,15 +1,15 @@
 // capture references to important DOM elements
-var weatherContainer = document.getElementById('weather');
-var formEl = document.querySelector('form');
-var inputEl = document.querySelector('input');
+const weatherContainer = document.getElementById('weather');
+const formEl = document.querySelector('form');
+const inputEl = document.querySelector('input');
 
 
-formEl.onsubmit = function(e) {
+formEl.onsubmit = (e) => {
   // prevent the page from refreshing
   e.preventDefault();
 
   // capture user's input from form field
-  var userInput = inputEl.value.trim()
+  let userInput = inputEl.value.trim()
   // abort API call if user entered no value
   if (!userInput) return
   // call the API and then update the page
@@ -22,7 +22,7 @@ formEl.onsubmit = function(e) {
 }
 
 // calls the OpenWeather API and returns an object of weather info
-function getWeather(query) {
+async function getWeather(query)  {
   // default search to USA
   if (!query.includes(",")) query += ',us'
   // return the fetch call which returns a promise
@@ -39,15 +39,15 @@ function getWeather(query) {
       // location not found, throw error/reject promise
       if (data.cod === "404") throw new Error('location not found')
       // create weather icon URL
-      var iconUrl = 'https://openweathermap.org/img/wn/' +
+      const iconUrl = 'https://openweathermap.org/img/wn/' +
         data.weather[0].icon +
         '@2x.png'
-      var description = data.weather[0].description
-      var actualTemp = data.main.temp
-      var feelsLikeTemp = data.main.feels_like
-      var place = data.name + ", " + data.sys.country
+      const description = data.weather[0].description
+      const actualTemp = data.main.temp
+      const feelsLikeTemp = data.main.feels_like
+      const place = data.name + ", " + data.sys.country
       // create JS date object from Unix timestamp
-      var updatedAt = new Date(data.dt * 1000)
+      const updatedAt = new Date(data.dt * 1000)
       // this object is used by displayWeatherInfo to update the HTML
       return {
         coords: data.coord.lat + ',' + data.coord.lon,
@@ -62,7 +62,7 @@ function getWeather(query) {
 }
 
 // show error message when location isn't found
-function displayLocNotFound() {
+const displayLocNotFound = () => {
   // clears any previous weather info
   weatherContainer.innerHTML = "";
   // create h2, add error msg, and add to page
@@ -72,12 +72,12 @@ function displayLocNotFound() {
 }
 
 // updates HTML to display weather info
-function displayWeatherInfo(weatherObj) {
+const displayWeatherInfo = (weatherObj) => {
   // clears any previous weather info
   weatherContainer.innerHTML = "";
 
   // inserts a linebreak <br> to weather section tag
-  function addBreak() {
+  const addBreak = () => {
     weatherContainer.appendChild(
       document.createElement('br')
     )
@@ -110,9 +110,7 @@ function displayWeatherInfo(weatherObj) {
 
   // current temperature
   var temp = document.createElement('p')
-  temp.textContent = "Current: " +
-    weatherObj.actualTemp +
-    "° F"
+  temp.textContent = `Current: ${weatherObj.actualTemp}° F`
   weatherContainer.appendChild(temp)
 
   // "feels like" temperature
